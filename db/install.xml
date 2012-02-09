@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="lib/db" VERSION="20100319" COMMENT="XMLDB file for external resource related tables"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+    <TABLES>
+    <!-- 
+    This table is supposed to have a 1-1 relation with every row in the
+    artefact table with artefacttype = 'resource'.  It contains additional data
+    that isn't in the artefact table. 
+    
+    External resource.
+    -->
+        <TABLE NAME="artefact_extresource">
+            <FIELDS>
+                <FIELD NAME="artefact" TYPE="int" LENGTH="10" NOTNULL="true" />
+                <FIELD NAME="ref" TYPE="text" NOTNULL="true"/>
+                <FIELD NAME="hash" TYPE="char" LENGTH="255" NOTNULL="true"/>
+                <FIELD NAME="kind" TYPE="char" LENGTH="255" NOTNULL="false" DEFAULT=""/>
+                <FIELD NAME="metadata" TYPE="text" NOTNULL="false" DEFAULT=""/>
+                <FIELD NAME="snippet" TYPE="text" NOTNULL="false" DEFAULT=""/>
+                <FIELD NAME="thumbnail" TYPE="text" NOTNULL="false" DEFAULT=""/>
+                <FIELD NAME="source" TYPE="text" NOTNULL="false" DEFAULT=""/>
+            </FIELDS>
+            <KEYS>
+                <KEY NAME="artefactpk" TYPE="primary" FIELDS="artefact" />
+                <KEY NAME="artefactfk" TYPE="foreign" FIELDS="artefact" REFTABLE="artefact" REFFIELDS="id" />
+            </KEYS>
+            <INDEXES>
+                <INDEX NAME="idx_hash" UNIQUE="false" FIELDS="hash"/>
+            </INDEXES>
+        </TABLE>
+    </TABLES>
+</XMLDB>
