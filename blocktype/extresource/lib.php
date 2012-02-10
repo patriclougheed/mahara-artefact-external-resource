@@ -68,7 +68,7 @@ class PluginBlocktypeExtresource extends PluginBlocktype
         {
             return $title;
         }
-        
+
         $artefact_id = $configdata['artefactid'];
         $artefact = ArtefactTypeExtresource::select_by_id($artefact_id);
         return $artefact ? $artefact->get('title') : '';
@@ -103,8 +103,12 @@ class PluginBlocktypeExtresource extends PluginBlocktype
                 'defaultvalue' => isset($configdata['url']) ? $configdata['url'] : null,
                 'rules' => array(
                     'required' => true
-                ),
+                )
             ),
+            'artefactid' => array(
+                'type' => 'hidden',
+                'value' => isset($configdata['artefactid']) ? $configdata['artefactid'] : null
+            )
         );
     }
 
@@ -117,26 +121,34 @@ class PluginBlocktypeExtresource extends PluginBlocktype
     {
         $values['url'] = ArtefactTypeExtresource::filter_url($values['url']);
         $url = $values['url'];
+        $id = $values['artefactid'];
 
-        if ($url)
+        if ($id)
         {
-            $artefact = ArtefactTypeExtresource::create($url);
-
-            global $view;
-            if ($group_id = $view->get('group'))
-            {
-                $artefact->set('group', $group_id);
-            }
-
-            $artefact->commit();
-            $id = $artefact->get('id');
-            $id = $id ? $id : 0;
-            $values['artefactid'] = $id;
-        }
-        else
-        {
+            $artefact = ArtefactTypeExtresource::select_by_id($id);
+            $artefact->delete();
             $values['artefactid'] = 0;
         }
+
+        if (empty($url))
+        {
+            return $values;
+        }
+
+        $artefact = ArtefactTypeExtresource::create($url);
+
+        global $view;
+        if ($group_id = $view->get('group'))
+        {
+            $artefact->set('group', $group_id);
+        }
+
+        $artefact->commit();
+
+        $id = $artefact->get('id');
+        $id = $id ? $id : 0;
+        $values['artefactid'] = $id;
+
         return $values;
     }
 
@@ -148,6 +160,22 @@ class PluginBlocktypeExtresource extends PluginBlocktype
     public static function allowed_in_view(View $view)
     {
         return true;
+    }
+
+    /**
+     * subclasses can override this if they need to do something a bit special
+     * eg more than just what the BlockInstance->delete function does.
+     * 
+     * @param BlockInstance $instance
+     */
+    public static function delete_instance(BlockInstance $instance)
+    {
+        $configdata = $instance->get('configdata');
+        if ($id = $configdata['artefactid'] ? $configdata['artefactid'] : null)
+        {
+            $artefact = ArtefactTypeExtresource::select_by_id($id);
+            $artefact->delete();
+        }
     }
 
 }

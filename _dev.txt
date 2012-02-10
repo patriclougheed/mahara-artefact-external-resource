@@ -1,0 +1,9 @@
+DEV NOTE
+
+Note that the artefact is used as a cache mecanism to avoid fetching the 
+resource's metadata each time a view is displayed.
+
+Blocks will create a new artefact each time the configuration is saved. Old artefacts
+are deleted when the block is deleted or when a new artefact is created.
+
+There are currently no interface to display the list of external resource artefacts.

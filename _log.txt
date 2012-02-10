@@ -1,0 +1,5 @@
+1 Move renderers to lab folder: mahara internal, wiki
+2 Delete artefact when they are removed from the block
+3 French translation
+4 Cleanup of old code
+5 Add screenshot

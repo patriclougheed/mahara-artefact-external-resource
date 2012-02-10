@@ -52,10 +52,13 @@ class AssetRenderer
             return $result;
         }
 
-        //We make sure we load them from most specialized to less specialized.
+        /*
+         * We make sure we load them from most specialized to less specialized.
+         * The first that provides a value for a field wins.
+         */
         $protocols = array(
-            'mahara_group',
-            'mahara_person',
+//            'mahara_group',
+//            'mahara_person',
             'oembed',
             'og',
             'image',
@@ -65,7 +68,7 @@ class AssetRenderer
             'google_document',
             'google_document_viewer',
             'google_widget',
-            'wiki',
+//            'wiki',
             'page');
 
         foreach ($protocols as $protocol)

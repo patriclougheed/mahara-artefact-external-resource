@@ -20,13 +20,6 @@ class PluginArtefactExtresource extends PluginArtefact
     public static function get_headers()
     {
         $headers = array();
-//        $javascript = get_config('wwwroot') . 'artefact/feedback/js/feedback.js';
-//        $javascript = '<script type="text/javascript" src="' . $javascript . '"></script>';
-//        $headers[] = $javascript;
-//
-//        $style = get_config('wwwroot') . 'artefact/ple/theme/raw/static/style/style.css';
-//        $style = '<link rel="stylesheet" type="text/css" href="' . $style . '">';
-//        $headers[] = $style;
         return $headers;
     }
 
@@ -88,8 +81,6 @@ class ArtefactTypeExtresource extends ArtefactType
 
     const TABLE_NAME = 'artefact_extresource';
 
-//    const DEFAULT_LIMIT = 3;
-
     /**
      * The hash function used to compute the url hash.
      * 
@@ -129,10 +120,6 @@ class ArtefactTypeExtresource extends ArtefactType
     /**
      * Create an artefact from the url. 
      * 
-     * If an artefact already exists for this url it is retrieved from the DB
-     * and it values are updated from the one computed from the url. In this
-     * case the change is not commited to the DB. 
-     * 
      * @param string $url
      * @return ArtefactTypeExtresource|null
      */
@@ -168,26 +155,6 @@ class ArtefactTypeExtresource extends ArtefactType
         return $result;
     }
 
-//    public static function get_group_artefacts($group_id)
-//    {
-//        if (empty($group_id))
-//        {
-//            return array();
-//        }
-//        $sql = 'SELECT a.*, e.* FROM artefact as a, ' . self::TABLE_NAME . ' as e where a.id = e.artefact AND a.group = ' . $group_id . ' ORDER BY a.id DESC';
-//        return get_records_sql_array($sql, $values = array());
-//    }
-//
-//    public static function get_user_artefacts($user_id)
-//    {
-//        if (empty($user_id))
-//        {
-//            return array();
-//        }
-//        $sql = 'SELECT a.*, e.* FROM artefact as a, ' . self::TABLE_NAME . ' as e where a.id = e.artefact AND a.group IS NULL AND a.owner = ' . $user_id . ' ORDER BY a.id DESC';
-//        return get_records_sql_array($sql, $values = array());
-//    }
-
     /**
      * 
      * @param string $id
@@ -201,29 +168,6 @@ class ArtefactTypeExtresource extends ArtefactType
         }
         $data = get_record('artefact', 'id', $id);
         return $data ? new self($id, $data) : null;
-
-//        if (empty($artefactid))
-//        {
-//            return null;
-//        }
-//        if (!is_array($artefactid))
-//        {
-//            $artefactid = array($artefactid);
-//        }
-//
-//        $idstr = join(',', array_map('intval', $artefactids));
-//        $where = 'artefact IN (' . $idstr . ')';
-//
-//        $sql = 'SELECT
-//                    a.title, a.description, a.author, a.authorname, a.ctime, 
-//                    r.*
-//                FROM {artefact} a
-//                    INNER JOIN {' . self::TABLE_NAME . '} r ON a.id = r.artefact 
-//                WHERE ' . $where . '
-//                ORDER BY a.ctime';
-//        $data = get_records_sql_array($sql, array());
-//        $data = count($artefactid) == 1 ? reset($data) : $data;
-//        return new self($result);
     }
 
     /**
@@ -258,97 +202,10 @@ class ArtefactTypeExtresource extends ArtefactType
         return null;
     }
 
-//    public static function get_limit($value = null)
-//    {
-//        $value = (int) $value;
-//        $result = $value ? $value : self::DEFAULT_LIMIT;
-//        //@todo: fetch the value from configuration
-//        return $result;
-//    }
-//    public static function get_id($object)
-//    {
-//        return is_object($object) && !is_null($object) ? $object->get('id') : (int) $object;
-//    }
-//    public static function get_view_id($object = null)
-//    {
-//        if (is_null($object))
-//        {
-//            global $view;
-//            return self::get_id($view);
-//        }
-//        else
-//        {
-//            return self::get_id($object);
-//        }
-//    }
-
     public static function is_active()
     {
         return get_field('artefact_installed', 'active', 'name', 'resource');
     }
-
-//    private static $allow_copy = true;
-//
-//    /**
-//     * If true then resources can be copied. 
-//     *
-//     * @return bool
-//     */
-//    public static function allow_copy()
-//    {
-//        return self::$allow_copy;
-//    }
-//
-//    public static function allow_copy_on()
-//    {
-//        self::$allow_copy = true;
-//    }
-//
-//    public static function allow_copy_off()
-//    {
-//        self::$allow_copy = false;
-//    }
-//    private static $allow_notification = true;
-//
-//    /**
-//     * If true then notification is allowed. If false not.
-//     *
-//     * @return bool
-//     */
-//    public static function allow_notification()
-//    {
-//        return self::$allow_notification;
-//    }
-//
-//    public static function allow_notification_on()
-//    {
-//        self::$allow_notification = true;
-//    }
-//
-//    public static function allow_notification_off()
-//    {
-//        self::$allow_notification = false;
-//    }
-
-    /**
-     * Returns true if the logged in user is the owner of $view_id. Returns false otherwise.
-     *
-     * @global User $USER
-     * @global View $view
-     * @param int $view_id
-     * @return bool
-     */
-//    public static function is_view_owner($view_id = null)
-//    {
-//        global $USER;
-//        global $view;
-//
-//        $the_view = is_null($view_id) ? $view : new View($view_id);
-//        $view_owner_id = $the_view ? $the_view->get('owner') : false;
-//        $user_id = self::get_id($USER);
-//        $result = $user_id != 0 && $user_id == $view_owner_id;
-//        return $result;
-//    }
 
     protected $ref;
     protected $hash;
@@ -396,6 +253,7 @@ class ArtefactTypeExtresource extends ArtefactType
         $data = (object) array(
                     'artefact' => $this->get('id'),
                     'ref' => $this->get('ref'),
+                    'hash' => $this->get('hash'),
                     'kind' => $this->get('kind'),
                     'metadata' => $this->get('metadata'),
                     'snippet' => $this->get('snippet'),
@@ -413,17 +271,6 @@ class ArtefactTypeExtresource extends ArtefactType
         }
         db_commit();
         $this->dirty = false;
-
-//        if (self::allow_notification())
-//        {
-//            $message = new StdClass;
-//            $message->users = array($owner);
-//            $message->subject = get_string('subject', 'artefact.resource', '');
-//            $message->message = get_string('message', 'artefact.resource', '');
-//
-//            require_once('activity.php');
-//            activity_occurred('maharamessage', $message);
-//        }
     }
 
     public static function is_singular()
@@ -450,16 +297,6 @@ class ArtefactTypeExtresource extends ArtefactType
         parent::delete();
         db_commit();
 
-//        if (self::allow_notification())
-//        {
-//            $message = new StdClass;
-//            $message->users = array($owner);
-//            $message->subject = get_string('subject', 'artefact.resource', '');
-//            $message->message = get_string('message', 'artefact.resource', '');
-//
-//            require_once('activity.php');
-//            activity_occurred('maharamessage', $message);
-//        }
     }
 
     public static function bulk_delete($artefactids)
