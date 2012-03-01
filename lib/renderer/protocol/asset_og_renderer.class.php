@@ -24,6 +24,17 @@ class AssetOgRenderer extends AssetRenderer
         $type = $asset->get_meta('og:type');
         if (empty($type))
         {
+            if ($video = $asset->get_meta('og:video'))
+            {
+                $type = 'video';
+            }
+            else if ($video = $asset->get_meta('og:image'))
+            {
+                $type = 'default';
+            }
+        }
+        if (empty($type))
+        {
             return array();
         }
 
@@ -55,15 +66,41 @@ class AssetOgRenderer extends AssetRenderer
         $url = $asset->get_meta('og:video');
         $url = str_replace('?autoPlay=1', '?', $url);
         $url = str_replace('&autoPlay=1', '', $url);
-        $type = $asset->get_meta('og:video:type');
 
         if (empty($url))
         {
             return array();
         }
 
+        $type = $asset->get_meta('og:video:type');
+        if ($type)
+        {
+            $type = ' type="' . $type . '" ';
+        }
+        
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
+        
+        $width = $asset->get_meta('og:video:width');
+        $width = $width ? $width : $asset->get_meta('video_width');
+        $height = $asset->get_meta('og:video:height');
+        $height = $height ? $height : $asset->get_meta('video_height');
+
+        if ($width)
+        {
+            $ratio = $height / $width;
+            $base = min($size, $width);
+            $width = $base;
+            $height = $ratio * $base;
+            $size = 'width="' . $width . '" height="' . $height . '"';
+        }
+        else
+        {
+            $size = 'width="' . $size . '"';
+        }
+
         $embed = <<<EOT
-        <embed type="$type" src="$url" />        
+        <embed $type $size src="$url" />        
 EOT;
 
         $result[self::EMBED_TYPE] = $type;
@@ -93,6 +130,11 @@ EOT;
         return $result;
     }
 
+    /**
+     * 
+     * @param HttpResource $asset
+     * @return array
+     */
     protected function render_default($asset)
     {
         $url = $asset->get_meta('og:url');
@@ -104,17 +146,21 @@ EOT;
         $height = $asset->get_meta('og:image:height');
         $description = $asset->get_meta('og:description');
         $description = $description ? $description : $asset->get_meta('description');
+
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
+
         if ($width)
         {
             $ratio = $height / $width;
-            $base = min(100, $width);
+            $base = min($size, $width);
             $width = $base;
             $height = $ratio * $base;
             $size = 'width="' . $width . '" height="' . $height . '"';
         }
         else
         {
-            $size = 'width="100"';
+            $size = 'width="' . $size . '"';
         }
         $embed = <<<EOT
         <div>
@@ -134,12 +180,14 @@ EOT;
      */
     protected function render_image($asset)
     {
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
 
         $title = $data['title'];
         $width = $data['width'];
         $height = $data['height'];
         $ratio = $height / $width;
-        $base = min(300, $width);
+        $base = min($size, $width);
         $width = $base;
         $height = $ratio * $base;
 

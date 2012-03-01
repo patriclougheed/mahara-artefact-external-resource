@@ -72,9 +72,13 @@ EOT;
         }
         $url = urlencode($url);
         $title = $asset->title();
+        $title = $title ? $title : $asset->name();
+        
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
 
         $embed = <<<EOT
-        <script src="//www.gmodules.com/ig/ifr?url=$url&amp;w=413&amp;output=js"></script>
+        <script src="//www.gmodules.com/ig/ifr?url=$url&amp;w=$size&amp;output=js"></script>
 EOT;
 
         $result = array();

@@ -12,9 +12,10 @@
 defined('INTERNAL') || die();
 
 $string['title'] = 'External Resource';
-$string['description'] = 'External resources: Youtube, Slideshare, Flickr, rss, pdf, ...';
-$string['url_description'] = 'Enter the url of an external ressource: YouTube, Dailymotion, Slideshare, Flick, Google gadget, Google book, Google map, rss, pdf, doc, web pages, etc. Note that to see the result of some urls you need to refresh the page.';
+$string['description'] = 'External resources: Youtube, Slideshare, Flickr, RSS, PDF, ...';
 $string['url'] = 'Url';
-$string['defaulttitledescription'] = 'If you leave this blank, the title of the resource will be used';
+$string['defaulttitledescription'] = 'If you leave this blank, the title of the resource will be used.';
+$string['size'] = 'Size';
+$string['size_description'] = 'Maximum size for a resource in pixels. Actual size may be smaller if the resource does not support it.';
 
 

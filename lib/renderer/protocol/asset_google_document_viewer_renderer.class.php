@@ -34,7 +34,7 @@ class AssetGoogleDocumentViewerRenderer extends AssetRenderer
     public function accept($asset)
     {
         $supported_extentions = array('doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx', 'pdf', 'pages', 'ai', 'psd', 'tiff', 'dxf', 'svg', 'eps', 'ps', 'eps', 'ttf', 'zip', 'rar');
-        return $asset->has_ext($supported_extentions);     
+        return $asset->has_ext($supported_extentions);
     }
 
     protected function url($document_url)
@@ -60,15 +60,33 @@ class AssetGoogleDocumentViewerRenderer extends AssetRenderer
 
         $keywords = $asset->get_meta('keywords');
 
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
+
         $embed = <<<EOT
-        <iframe width="100%" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="$url"></iframe>
+        <div style="height:{$size}px;" class="resize vertical" >
+            <iframe style=background-color:#ffffff;" width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="$url"></iframe>
+        </div>
+        <style type="text/css">
+        div.resize.vertical {
+            background-color: #EEEEEE;
+            border-color: #EEEEEE;
+            border-style: solid;
+            border-width: 1px;
+            resize:vertical;
+            overflow: hidden; 
+            padding-bottom:15px; 
+            min-height:24px; 
+            max-height:800px;
+}
+        </style>
 EOT;
 
 
         $result = array();
         $result[self::EMBED_SNIPET] = $embed;
         $result[self::TITLE] = $title;
-        $result[self::THUMBNAIL] = $image_src;
+        //$result[self::THUMBNAIL] = $image_src;
         $result[self::DESCRIPTION] = $description;
         $result[self::TAGS] = $keywords;
         return $result;

@@ -30,7 +30,7 @@ class AssetRenderer
     const DURATION = 'duration';
     const DESCRIPTION = 'description';
 
-    static function get($url)
+    static function get($url, $config = array())
     {
         $result = array();
         $url = trim($url);
@@ -38,7 +38,7 @@ class AssetRenderer
         {
             return array();
         }
-        $asset = new HttpResource($url);
+        $asset = new HttpResource($url, $config);
         $renderer = new AssetAggregatedRenderer(self::plugins());
         return $renderer->render($asset);
         return $result;
@@ -69,6 +69,7 @@ class AssetRenderer
             'google_document_viewer',
             'google_widget',
 //            'wiki',
+//            'scratch',
             'page');
 
         foreach ($protocols as $protocol)

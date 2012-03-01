@@ -25,8 +25,11 @@ class AssetOembedRenderer extends AssetRenderer
             return false;
         }
 
+        $width = (int) $asset->config('size');
+        $width = (24 <= $width && $width <= 800) ? $width : 300;
+
         $href = $link['href'];
-        $data = HttpResource::fetch_json($href . '&maxwidth=300');
+        $data = HttpResource::fetch_json("$href&maxwidth=$width"); //&maxheight=$height
         if (empty($data))
         {
             return false;
@@ -35,7 +38,7 @@ class AssetOembedRenderer extends AssetRenderer
         $data['title'] = isset($data['title']) ? $data['title'] : '';
         $data['width'] = isset($data['width']) ? intval($data['width']) : '';
         $data['height'] = isset($data['height']) ? intval($data['height']) : '';
-        
+
         $type = $data['type'];
         $f = array($this, "render_$type");
         if (is_callable($f))
@@ -47,7 +50,7 @@ class AssetOembedRenderer extends AssetRenderer
             $result = array();
         }
         $result[self::THUMBNAIL] = isset($data['thumbnail_url']) ? $data['thumbnail_url'] : '';
-        $result[self::TITLE] = isset($data['title']) ? $data['title'] : '' ;
+        $result[self::TITLE] = isset($data['title']) ? $data['title'] : '';
 
         return $result;
     }
@@ -58,23 +61,28 @@ class AssetOembedRenderer extends AssetRenderer
         {
             return array();
         }
+
         $result = array();
+        $html = isset($data['html']) ? $data['html'] : '';
+        if ($html)
+        {
+            $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $html . '</div></div>';
+            return $result;
+        }
 
         $title = $data['title'];
-        $width = $data['width'];
-        $height = $data['height'];
-        $ratio = $height / $width;
-        $base = min(300, $width);
-        $width = $base;
-        $height = $ratio * $base;
+        $width = (int)$data['width'];
+        $height = (int)$data['height'];
+//        $ratio = $height / $width;
+//        $height = $ratio * $width;
 
         $url = $data['url'];
 
         $embed = <<<EOT
-        <a href="$url"><img src="{$url}" width="{$width}" height="{$height}" "alt="{$title}" title="{$title}"></a>
+        <div style="text-align:center"><a href="$url"><img src="{$url}" width="{$width}" height="{$height}" "alt="{$title}" title="{$title}"></a></div>
 EOT;
 
-        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] .'</div></div>';
+        $result[self::EMBED_SNIPET] = $embed;
         return $result;
     }
 
@@ -85,7 +93,7 @@ EOT;
             return array();
         }
         $result = array();
-        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] .'</div></div>';
+        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] . '</div></div>';
         return $result;
     }
 
@@ -97,7 +105,7 @@ EOT;
         }
 
         $result = array();
-        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] .'</div></div>';
+        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] . '</div></div>';
         return $result;
     }
 

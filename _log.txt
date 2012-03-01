@@ -3,3 +3,7 @@
 3 French translation
 4 Cleanup of old code
 5 Add screenshot
+
+6 Add support for size in the block configuration form
+7 Add help page for url in the block configuration form
+8 Add support for CSS3 resize for some types of content - Google Map, Google Document, etc

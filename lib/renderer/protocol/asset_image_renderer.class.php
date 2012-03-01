@@ -25,8 +25,12 @@ class AssetImageRenderer extends AssetRenderer
         $url = $asset->url();
         $title = $asset->title();
         $title = $title ? $title : $asset->name();
+        
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
+        
         $embed = <<<EOT
-        <a href="$url"><img src="{$url}" alt="{$title}" title="{$title}"></a>
+        <div style="text-align:center"><a href="$url"><img src="{$url}" width="$size" alt="{$title}" title="{$title}"></a></div>
 EOT;
 
         $result = array();

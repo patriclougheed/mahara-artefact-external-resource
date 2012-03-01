@@ -29,7 +29,7 @@ class AssetRssRenderer extends AssetRenderer
         $id = 'a' . md5($url);
 
         $embed = <<<EOT
-        <style>
+        <style type="text/css">
             .gfg-root {
                 border: none;
                 font-family: inherit;

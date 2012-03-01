@@ -107,10 +107,17 @@ class HttpResource
     protected $title = null;
     protected $mime = null;
     protected $doc = null;
+    protected $config = array();
 
-    public function __construct($url)
+    public function __construct($url, $config = array())
     {
         $this->url = $url;
+        $this->config = $config;
+    }
+
+    public function config($key = '', $default = null)
+    {
+        return isset($this->config[$key]) ? $this->config[$key] : $default;
     }
 
     /**
@@ -249,6 +256,27 @@ class HttpResource
             }
         }
         return false;
+    }
+
+    public function charset()
+    {
+        $info = $this->info();
+
+        $content_type = isset($info['content_type']) ? $info['content_type'] : '';
+        if (empty($content_type))
+        {
+            return null;
+        }
+        $items = explode(';', $content_type);
+        foreach ($items as $item)
+        {
+            $parts = explode('=', $item);
+            if (count($parts) == 2 && reset($parts) == 'charset')
+            {
+                return strtolower(end($parts));
+            }
+        }
+        return null;
     }
 
     /**
@@ -412,7 +440,7 @@ class HttpResource
      *
      * @return DOMDocument|boolean
      */
-    protected function doc()
+    public function doc()
     {
         if (!is_null($this->doc))
         {
@@ -437,7 +465,7 @@ class HttpResource
             $key = $key ? strtolower($key) : $key;
             if ($name == $key)
             {
-                return $attributes['content'];
+                return isset($attributes['content']) ? $attributes['content'] : false;
             }
         }
         return false;
@@ -483,9 +511,9 @@ class HttpResource
         }
         $xpath = new DOMXpath($doc);
         $nodes = $xpath->query($query);
-        if ($nodes)
+        if ($nodes->length > 0)
         {
-            return $doc->saveXML($nodes);
+            return $doc->saveXML($nodes->item(0));
         }
         else
         {
@@ -525,8 +553,7 @@ class HttpResource
         {
             $success = $result->loadHTML($source);
         }
-        //@todo: remove line below
-        $e = libxml_get_errors();
+        //$e = libxml_get_errors();
         return $result ? $result : false;
     }
 
@@ -552,6 +579,7 @@ class HttpResource
             for ($i = 0; $i < $length; ++$i)
             {
                 $name = $attributes->item($i)->name;
+                $value = $attributes->item($i)->value;
                 $value = $attributes->item($i)->value;
                 $values[$name] = $value;
             }

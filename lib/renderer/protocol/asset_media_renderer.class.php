@@ -41,9 +41,16 @@ class AssetMediaRenderer extends AssetRenderer
         $title = $asset->title();
         $description = $asset->get_meta('description');
         $keywords = $asset->get_meta('keywords');
+        
+        
+        $size = (int) $asset->config('size');
+        $size = (24 <= $size && $size <= 800) ? $size : 300;
+        
+        $width = $size;
+        $height = $size *9/16;
 
         $embed = <<<EOT
-        <embed width="100%" name="plugin" src="$url" >
+        <div style="text-align:center;"><embed style="display:inline-block;" width="{$width}px" height="{$height}px" name="plugin" src="$url" ></div>
 EOT;
 
 

@@ -60,19 +60,19 @@ class PluginArtefactExtresource extends PluginArtefact
         return true;
     }
 
-    public static function view_export_extra_artefacts($viewids)
-    {
-        $artefacts = array();
-        //@TODO:
-        return $artefacts;
-    }
-
-    public static function artefact_export_extra_artefacts($artefactids)
-    {
-        $artefacts = array();
-        //@TODO:
-        return $artefacts;
-    }
+//    public static function view_export_extra_artefacts($viewids)
+//    {
+//        $artefacts = array();
+//        //@TODO:
+//        return $artefacts;
+//    }
+//
+//    public static function artefact_export_extra_artefacts($artefactids)
+//    {
+//        $artefacts = array();
+//        //@TODO:
+//        return $artefacts;
+//    }
 
 }
 
@@ -123,9 +123,9 @@ class ArtefactTypeExtresource extends ArtefactType
      * @param string $url
      * @return ArtefactTypeExtresource|null
      */
-    public static function create($url)
+    public static function create($url, $config = array())
     {
-        $asset = AssetRenderer::get($url);
+        $asset = AssetRenderer::get($url, $config);
         if (empty($asset))
         {
             return null;
@@ -134,7 +134,7 @@ class ArtefactTypeExtresource extends ArtefactType
         $data['title'] = isset($asset[AssetRenderer::TITLE]) ? $asset[AssetRenderer::TITLE] : '';
         $data['description'] = isset($asset[AssetRenderer::DESCRIPTION]) ? $asset[AssetRenderer::DESCRIPTION] : '';
         $data['ref'] = isset($asset[AssetRenderer::URL]) ? $asset[AssetRenderer::URL] : $url;
-        $data['hash'] = self::hash($data['url']);
+        $data['hash'] = isset($asset[AssetRenderer::URL]) ? self::hash($asset[AssetRenderer::URL]) : '';
         $data['snippet'] = isset($asset[AssetRenderer::EMBED_SNIPET]) ? $asset[AssetRenderer::EMBED_SNIPET] : '';
         $data['thumbnail'] = isset($asset[AssetRenderer::THUMBNAIL]) ? $asset[AssetRenderer::THUMBNAIL] : '';
         $data['metadata'] = serialize($asset);

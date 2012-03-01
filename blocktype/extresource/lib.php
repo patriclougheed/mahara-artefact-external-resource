@@ -15,6 +15,8 @@ safe_require('artefact', 'extresource');
 
 class PluginBlocktypeExtresource extends PluginBlocktype
 {
+    
+    public static $default_size = 250;
 
     public static function get_string($identifier, $section = 'blocktype.extresource/extresource')
     {
@@ -50,7 +52,7 @@ class PluginBlocktypeExtresource extends PluginBlocktype
             return $title;
         }
 
-        $artefact_id = $configdata['artefactid'];
+        $artefact_id = isset($configdata['artefactid']) ? $configdata['artefactid'] : 0;
         $artefact = ArtefactTypeExtresource::select_by_id($artefact_id);
         return $artefact ? $artefact->get('title') : '';
     }
@@ -69,7 +71,7 @@ class PluginBlocktypeExtresource extends PluginBlocktype
             return $title;
         }
 
-        $artefact_id = $configdata['artefactid'];
+        $artefact_id = isset($configdata['artefactid']) ? $configdata['artefactid'] : 0;
         $artefact = ArtefactTypeExtresource::select_by_id($artefact_id);
         return $artefact ? $artefact->get('title') : '';
     }
@@ -77,7 +79,7 @@ class PluginBlocktypeExtresource extends PluginBlocktype
     public static function render_instance(BlockInstance $instance, $editing = false)
     {
         $configdata = $instance->get('configdata');
-        $artefact_id = $configdata['artefactid'];
+        $artefact_id = isset($configdata['artefactid']) ? $configdata['artefactid'] : 0;
         $artefact = ArtefactTypeExtresource::select_by_id($artefact_id);
         $snippet = $artefact ? $artefact->get('snippet') : '';
 
@@ -93,22 +95,52 @@ class PluginBlocktypeExtresource extends PluginBlocktype
 
     public static function instance_config_form($instance)
     {
+        /**
+         * Note that the default behaviour of contextualHelp does not allow to
+         * retrieve a help page for an block contained in an artefact. So we 
+         * have to do it differently.
+         */
+        global $THEME;
+        $img = $THEME->get_url('images/icon_help.png');        
+        $urlhelp =<<<EOT
+        <a onclick="contextualHelp('instconf','url','artefact','extresource','','',this); return false;" href="">
+            <img title="Help" alt="Help" src="$img">
+        </a>
+EOT;
+        
         $configdata = $instance->get('configdata');
         return array(
             'url' => array(
                 'type' => 'text',
                 'title' => self::get_string('url'),
-                'description' => self::get_string('url_description'),
                 'size' => 100,
                 'defaultvalue' => isset($configdata['url']) ? $configdata['url'] : null,
                 'rules' => array(
                     'required' => true
                 )
             ),
+            'urlhelp' => array(
+                'type' => 'html',
+                'value' => $urlhelp,
+                    
+            ),
             'artefactid' => array(
                 'type' => 'hidden',
                 'value' => isset($configdata['artefactid']) ? $configdata['artefactid'] : null
-            )
+            ),
+            'size' => array(
+                'type' => 'text',
+                'title' => self::get_string('size'),
+                'size' => 3,
+                'rules' => array(
+                    'required' => false,
+                    'integer' => true,
+                    'minvalue' => 100,
+                    'maxvalue' => 800,
+                ),
+                'description' => self::get_string('size_description'),
+                'defaultvalue' => (!empty($configdata['size'])) ? $configdata['size'] : self::$default_size,
+            ),
         );
     }
 
@@ -134,8 +166,10 @@ class PluginBlocktypeExtresource extends PluginBlocktype
         {
             return $values;
         }
-
-        $artefact = ArtefactTypeExtresource::create($url);
+        
+        $config = array();
+        $config['size'] = isset($values['size']) ? $values['size'] : self::$default_size;
+        $artefact = ArtefactTypeExtresource::create($url, $config);
 
         global $view;
         if ($group_id = $view->get('group'))
@@ -171,7 +205,8 @@ class PluginBlocktypeExtresource extends PluginBlocktype
     public static function delete_instance(BlockInstance $instance)
     {
         $configdata = $instance->get('configdata');
-        if ($id = $configdata['artefactid'] ? $configdata['artefactid'] : null)
+        $id = isset($configdata['artefactid']) ? $configdata['artefactid'] : null;
+        if ($id)
         {
             $artefact = ArtefactTypeExtresource::select_by_id($id);
             $artefact->delete();
