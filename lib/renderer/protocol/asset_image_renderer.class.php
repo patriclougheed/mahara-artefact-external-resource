@@ -35,7 +35,7 @@ EOT;
 
         $result = array();
         $result[self::URL] = $url;
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         $result[self::TITLE] = $title;
         $result[self::THUMBNAIL] = $url;
         return $result;

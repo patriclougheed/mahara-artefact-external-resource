@@ -30,49 +30,13 @@ class AssetPageRenderer extends AssetRenderer
 
         if (empty($image_src))
         {
-            $image_src = $asset->get_link('rel', 'apple-touch-icon');
-            $image_src = $image_src ? $image_src['href'] : false;
+            $image_src = $this->get_icon($asset);
         }
-        if (empty($image_src))
-        {
-            $image_src = $asset->get_link('rel', 'fluid-icon');
-            $image_src = $image_src ? $image_src['href'] : false;
-        }
-        if (empty($image_src))
-        {
-            $image_src = $asset->get_link('rel', 'shortcut icon');
-            $image_src = $image_src ? $image_src['href'] : false;
-        }
-        if (empty($image_src))
-        {
-            $image_src = $asset->get_link('rel', 'icon');
-            $image_src = $image_src ? $image_src['href'] : false;
-        }
-        if (empty($image_src))
-        {
-            $image_src = $THEME->get_url('images/internet.png', false, 'artefact/extresource');
-        }
-        
-        if (strpos($image_src, '//') === 0)
-        {
-            $image_src = "http:$image_src";
-        }
-        else if (strpos($image_src, '/') === 0) //relative url to the root 
-        {
-            $url = $asset->url();
-            $protocol = reset(explode('://', $url));
-            $domain = end(explode('://', $url));
-            $domain = reset(explode('/', $domain));
-            $image_src = "$protocol://$domain/$image_src";
-        }
-        else if (strpos($image_src, 'http') !== 0) //relative url to the document
-        {
-            $url = $asset->url();
-            $tail = end(explode('/', $url));
-            $base = str_replace($tail, '', $url);
 
-            $image_src = $base . $image_src;
-        }
+        $icon = $this->get_icon($asset);
+        
+        $image_src = $asset->canonic_url($image_src);
+        $icon = $asset->canonic_url($icon);
 
         $embed = <<<EOT
         <a href="$url">
@@ -84,12 +48,36 @@ EOT;
 
 
         $result = array();
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         $result[self::TITLE] = $title;
         $result[self::THUMBNAIL] = $image_src;
         $result[self::DESCRIPTION] = $description;
+        $result[self::ICON] = $icon;
         $result[self::TAGS] = $keywords;
         return $result;
+    }
+
+    function get_icon($asset)
+    {
+
+        $icon = $asset->get_link('rel', 'apple-touch-icon');
+        $icon = $icon ? $icon['href'] : false;
+        if (empty($icon))
+        {
+            $icon = $asset->get_link('rel', 'fluid-icon');
+            $icon = $icon ? $icon['href'] : false;
+        }
+        if (empty($icon))
+        {
+            $icon = $asset->get_link('rel', 'shortcut icon');
+            $icon = $icon ? $icon['href'] : false;
+        }
+        if (empty($icon))
+        {
+            $icon = $asset->get_link('rel', 'icon');
+            $icon = $icon ? $icon['href'] : false;
+        }
+        return $icon;
     }
 
 }

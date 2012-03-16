@@ -52,7 +52,7 @@ class AssetMaharaPersonRenderer extends AssetRenderer
 
         $result = array();
         safe_require('blocktype', 'ple/person');
-        $result[self::EMBED_SNIPET] = PluginBlocktypePerson::render_preview($id);
+        $result[self::EMBED_SNIPPET] = PluginBlocktypePerson::render_preview($id);
         $result[self::THUMBNAIL] = PluginBlocktypePerson::get_thumbnail($id);
         $result[self::TITLE] = $data->prefferedname ? $data->prefferedname : $data->firstname . ' ' . $data->lastname;
         $result[self::DESCRIPTION] = isset($data->description) ? $data->description : '';

@@ -105,7 +105,7 @@ EOT;
 
         $result[self::EMBED_TYPE] = $type;
         $result[self::EMBED_URL] = $url;
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         $result[self::TAGS] = $asset->get_meta('og:video:tag');
         $result[self::CREATED_TIME] = $asset->get_meta('og:video:release_date');
         $result[self::DURATION] = $asset->get_meta('og:duration');
@@ -165,11 +165,11 @@ EOT;
         $embed = <<<EOT
         <div>
             <a href="$url" style="float:left; margin-right:5px; margin-bottom:5px; display:block;"><img src="{$image}" {$size} alt="{$title}" title="{$title}"></a>
-            $description <div style="clear:both;"></div>
+            <div style="clear:both;"></div>
         </div>
 EOT;
 
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         $result[self::DESCRIPTION] = $asset->get_meta('description');
         return $result;
     }

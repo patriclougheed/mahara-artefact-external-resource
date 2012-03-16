@@ -66,7 +66,7 @@ class AssetOembedRenderer extends AssetRenderer
         $html = isset($data['html']) ? $data['html'] : '';
         if ($html)
         {
-            $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $html . '</div></div>';
+            $result[self::EMBED_SNIPPET] = '<div style="display:inline-block">' . $html . '</div>';
             return $result;
         }
 
@@ -79,10 +79,10 @@ class AssetOembedRenderer extends AssetRenderer
         $url = $data['url'];
 
         $embed = <<<EOT
-        <div style="text-align:center"><a href="$url"><img src="{$url}" width="{$width}" height="{$height}" "alt="{$title}" title="{$title}"></a></div>
+        <div><a href="$url"><img src="{$url}" width="{$width}" height="{$height}" "alt="{$title}" title="{$title}"></a></div>
 EOT;
 
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         return $result;
     }
 
@@ -93,7 +93,7 @@ EOT;
             return array();
         }
         $result = array();
-        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] . '</div></div>';
+        $result[self::EMBED_SNIPPET] = '<div style="display:inline-block">' . $data['html'] . '</div>';
         return $result;
     }
 
@@ -105,7 +105,7 @@ EOT;
         }
 
         $result = array();
-        $result[self::EMBED_SNIPET] = '<div style="text-align:center"><div style="display:inline-block">' . $data['html'] . '</div></div>';
+        $result[self::EMBED_SNIPPET] = '<div style="display:inline-block">' . $data['html'] . '</div>';
         return $result;
     }
 

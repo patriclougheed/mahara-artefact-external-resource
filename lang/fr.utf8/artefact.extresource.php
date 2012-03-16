@@ -13,4 +13,4 @@ defined('INTERNAL') || die();
 
 $string['pluginname'] = 'Ressource externe';
 $string['extresource'] = 'Ressource externe';
-
+$string['no_java'] = 'Java n\'est pas installé sur votre ordinateur. Pour que cela fonctionne vous devez d\'abbord installer java sur votre ordinateur';

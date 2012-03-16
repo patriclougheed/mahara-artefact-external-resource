@@ -135,7 +135,7 @@ class ArtefactTypeExtresource extends ArtefactType
         $data['description'] = isset($asset[AssetRenderer::DESCRIPTION]) ? $asset[AssetRenderer::DESCRIPTION] : '';
         $data['ref'] = isset($asset[AssetRenderer::URL]) ? $asset[AssetRenderer::URL] : $url;
         $data['hash'] = isset($asset[AssetRenderer::URL]) ? self::hash($asset[AssetRenderer::URL]) : '';
-        $data['snippet'] = isset($asset[AssetRenderer::EMBED_SNIPET]) ? $asset[AssetRenderer::EMBED_SNIPET] : '';
+        $data['snippet'] = isset($asset[AssetRenderer::EMBED_SNIPPET]) ? $asset[AssetRenderer::EMBED_SNIPPET] : '';
         $data['thumbnail'] = isset($asset[AssetRenderer::THUMBNAIL]) ? $asset[AssetRenderer::THUMBNAIL] : '';
         $data['metadata'] = serialize($asset);
         $data['source'] = '';

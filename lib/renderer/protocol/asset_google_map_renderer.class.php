@@ -20,7 +20,7 @@ class AssetGoogleMapRenderer extends AssetRenderer
         $url = str_replace('http://', '', $url);
         $url = str_replace('https://', '', $url);
 
-        $domain = reset(split('/', $url));
+        $domain = reset(explode('/', $url));
         return strpos($domain, 'maps.google') !== false;
     }
 
@@ -119,7 +119,7 @@ EOT;
 
 
         $result = array();
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         $result[self::TITLE] = $title;
         $result[self::DESCRIPTION] = $description;
         $result[self::TAGS] = $keywords;

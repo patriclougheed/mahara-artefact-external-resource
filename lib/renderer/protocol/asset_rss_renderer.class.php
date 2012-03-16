@@ -87,7 +87,7 @@ EOT;
 
 
         $result = array();
-        $result[self::EMBED_SNIPET] = $embed;
+        $result[self::EMBED_SNIPPET] = $embed;
         $result[self::TITLE] = $title;
         return $result;
     }

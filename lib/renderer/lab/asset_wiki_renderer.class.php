@@ -36,7 +36,7 @@ class AssetWikiRenderer extends AssetRenderer
         $domain = $asset->url_domain();
         $description = $asset->findx('//div[@id="bodyContent"]/p');
         $result = array();
-        $result[self::EMBED_SNIPET] = $description;
+        $result[self::EMBED_SNIPPET] = $description;
         $result[self::TITLE] = $title;
         $result[self::DESCRIPTION] = $description;
         $result[self::TAGS] = $keywords;

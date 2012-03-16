@@ -17,7 +17,7 @@ class AssetRenderer
 {
 
     const THUMBNAIL = 'thumbnail';
-    const EMBED_SNIPET = 'embed_snipet';
+    const EMBED_SNIPPET = 'embed_snippet';
     const EMBED_TYPE = 'embed_type';
     const EMBED_URL = 'embed_url';
     const WIDTH = 'width';
@@ -29,9 +29,14 @@ class AssetRenderer
     const CREATED_TIME = 'created_time';
     const DURATION = 'duration';
     const DESCRIPTION = 'description';
+    const ICON = 'icon';
 
     static function get($url, $config = array())
     {
+        if (strpos('url', 'javascript:') !== false)
+        {
+            return array();
+        }
         $result = array();
         $url = trim($url);
         if (empty($url))
@@ -40,7 +45,8 @@ class AssetRenderer
         }
         $asset = new HttpResource($url, $config);
         $renderer = new AssetAggregatedRenderer(self::plugins());
-        return $renderer->render($asset);
+        $result = $renderer->render($asset);
+        $result['url'] = $url;
         return $result;
     }
 
@@ -69,7 +75,7 @@ class AssetRenderer
             'google_document_viewer',
             'google_widget',
 //            'wiki',
-//            'scratch',
+            'scratch',
             'page');
 
         foreach ($protocols as $protocol)

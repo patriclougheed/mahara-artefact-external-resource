@@ -397,6 +397,31 @@ class HttpResource
         return $nodes->length != 0;
     }
 
+    public function canonic_url($src)
+    {
+        if (strpos($src, '//') === 0)
+        {
+            $src = "http:$src";
+        }
+        else if (strpos($src, '/') === 0) //relative url to the root 
+        {
+            $url = $this->url();
+            $protocol = reset(explode('://', $url));
+            $domain = end(explode('://', $url));
+            $domain = reset(explode('/', $domain));
+            $src = "$protocol://$domain/$src";
+        }
+        else if (strpos($src, 'http') !== 0) //relative url to the document
+        {
+            $url = $this->url();
+            $tail = end(explode('/', $url));
+            $base = str_replace($tail, '', $url);
+
+            $src = $base . $src;
+        }
+        return $src;
+    }
+
     /**
      * Content of the resource.
      * 

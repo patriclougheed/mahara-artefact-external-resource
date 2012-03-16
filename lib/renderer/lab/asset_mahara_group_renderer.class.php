@@ -46,7 +46,7 @@ class AssetMaharaGroupRenderer extends AssetRenderer
 
         $result = array();
         safe_require('blocktype', 'ple/group');
-        $result[self::EMBED_SNIPET] = PluginBlocktypeGroup::render_preview($group_id);
+        $result[self::EMBED_SNIPPET] = PluginBlocktypeGroup::render_preview($group_id);
         $result[self::THUMBNAIL] = PluginBlocktypeGroup::get_thumbnail($group_id);
         $result[self::TITLE] = $data->name;
         $result[self::DESCRIPTION] = $data->description;
